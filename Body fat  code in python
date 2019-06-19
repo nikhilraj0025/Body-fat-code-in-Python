@@ -1,0 +1,41 @@
+import pandas as pd
+bf=pd.read_csv(r"C:\Users\AKHIL\Desktop\R csv\bodyfat.csv")
+print(bf.head())
+bf.shape
+
+bf_x=bf.iloc[:,1:]
+bf_x.head()
+bf_y=bf.iloc[:,0]
+bf_y.head()
+bf_x.head()
+
+
+import sklearn
+from sklearn.model_selection import train_test_split
+bf_x_train,bf_x_test,bf_y_train,bf_y_test=train_test_split(bf_x,bf_y,test_size=.2,random_state=101)
+print(bf_x_train.shape)###### checking no of rows in test and train are same ####
+print(bf_y_train.shape)
+print(bf_x_test.shape)
+print(bf_y_test.shape)
+      
+from sklearn import linear_model
+import statsmodels.formula.api as sm
+
+bf_model=sm.OLS(bf_y_train,bf_x_train).fit()
+print(bf_model.summary2())
+
+bf_predict=bf_model.predict(bf_x_test)
+bf_predict
+
+
+pred_actualnew=pd.DataFrame({'predicted':bf_predict,'actual':bf_y_test})
+pred_actualnew.head()
+
+
+from sklearn import metrics
+bf_MAE=metrics.mean_absolute_error(bf_y_test,bf_predict)
+print(bf_MAE)
+
+bf_MSE=metrics.mean_squared_error(bf_y_test,bf_predict)
+print(bf_MSE)
+print(pow(bf_MSE,.5))      
